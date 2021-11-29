@@ -13,25 +13,25 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.util.Random;
 
+import static java.lang.Integer.parseInt;
 import static javafx.geometry.Pos.CENTER;
-import static javafx.scene.paint.Color.GRAY;
+import static javafx.scene.paint.Color.*;
 
 public class Grid extends Application {
 
+    private javafx.scene.shape.Rectangle rectangle;
+
     @Override
     public void start(Stage stage) {
-        Cell cell = new Cell(25,25);
         GridPane pane = new GridPane();
         pane.setMaxHeight(200);
         pane.setMaxWidth(400);
         pane.setAlignment(CENTER);
 
-        for (int i=0;i<=75;i++){
-            for(int j = 0;j<=50; j++){
+        for (int i=0;i<75;i++){
+            for(int j = 0;j<50; j++){
                 pane.add(new javafx.scene.shape.Rectangle(10,10),i,j);
             }
         }
@@ -41,9 +41,9 @@ public class Grid extends Application {
         pane2.setMaxWidth(400);
         pane2.setAlignment(CENTER);
 
-        for (int i=0;i<=75;i++){
-            for(int j = 0;j<=50; j++){
-                pane2.add(new javafx.scene.shape.Rectangle(10,10),i,j);
+        for (int i=0;i<75;i++){
+            for(int j = 0;j<50; j++){
+                pane2.add(new javafx.scene.shape.Rectangle(10,10, BLACK),i,j);
             }
         }
 
@@ -52,8 +52,8 @@ public class Grid extends Application {
         pane1.setMaxWidth(400);
         pane1.setAlignment(CENTER);
 
-        for (int i=0;i<=75;i++){
-            for(int j = 0;j<=50; j++){
+        for (int i=0;i<75;i++){
+            for(int j = 0;j<50; j++){
                 pane1.add(new javafx.scene.shape.Rectangle(10,10),i,j);
             }
         }
@@ -90,8 +90,24 @@ public class Grid extends Application {
         start1.setTextFill(Color.GREEN);
         start1.setOnAction(e-> {
                     food_field.getText();
-                    Food.food = Integer.parseInt(food_field.getText());
+                    Food.food = parseInt(food_field.getText());
+            Random random = new Random();
+            int count = 0;
+            for (int i=0;i<75;i++){
+                for(int j = 0;j<50; j++){
+                    while(count < Food.food) {
+                        int xcoord = random.nextInt(75);
+                        int ycoord = random.nextInt(50);
+                        rectangle = new javafx.scene.shape.Rectangle(10, 10, YELLOW);
+                        pane.add(rectangle, xcoord, ycoord);
+                        //index begin with 1
+                        System.out.println(xcoord + " " + ycoord);
+                        count++;
+                    }
+                }
+            }
                     System.out.println(Food.food);
+            food_field.clear();
                 }
         );
         Button stop1= new Button("Stop");
@@ -161,11 +177,28 @@ public class Grid extends Application {
         textfields.getChildren().addAll(food2,sexedcell,asexualcell);
 
         start2.setOnAction(e->{
-            Food.food = Integer.parseInt(food2.getText());
+            Food.food = parseInt(food2.getText());
+
+            Random random = new Random();
+            int count = 0;
+            for (int i=0;i<75;i++){
+                for(int j = 0;j<50; j++){
+                    while(count < Food.food) {
+                        int xcoord = random.nextInt(75);
+                        int ycoord = random.nextInt(50);
+                        rectangle = new javafx.scene.shape.Rectangle(10, 10, YELLOW);
+                        pane.add(rectangle, xcoord, ycoord);
+                        //index begin with 1
+                        System.out.println(xcoord + " " + ycoord);
+                        count++;
+                    }
+                }
+            }
 
             System.out.println(Food.food);
             System.out.println(sexedcell.getText());
             System.out.println(asexualcell.getText());
+            food2.clear();
         });
         Button back3 = new Button("Back");
         back3.setTextFill(Color.RED);
@@ -190,10 +223,27 @@ public class Grid extends Application {
         stop3.setFont(Font.font(14));
 
         Button addcell1 = new Button("Add sexed cell");
-        Button addcell2 = new Button("Add asuxaul cell");
-
+        Button addcell2 = new Button("Add asexual cell");
+        //int randomx = (int) Math.ceil(Math.random() * 75);
+        //int randomy = (int) Math.ceil(Math.random() *50);
         start3.setOnAction(e->{
-            Food.food = Integer.parseInt(food3.getText());
+            Food.food = parseInt(food3.getText());
+            System.out.println(Food.food);
+            Random random = new Random();
+            int count = 0;
+            for (int i=0;i<75;i++){
+                for(int j = 0;j<50; j++){
+                    while(count < Food.food) {
+                        int xcoord = random.nextInt(75);
+                        int ycoord = random.nextInt(50);
+                        rectangle = new javafx.scene.shape.Rectangle(10, 10, YELLOW);
+                        pane.add(rectangle, xcoord, ycoord);
+                        //index begin with 1
+                        System.out.println(xcoord + " " + ycoord);
+                        count++;
+                    }
+                }
+            }
             food3.clear();
         });
 
@@ -258,24 +308,16 @@ public class Grid extends Application {
         pane.setAlignment(CENTER);
         Scene home_scene = new Scene(homebox,500,500);
 
-        Scene case1 = new Scene(casebox1,500,500);
-        Scene case2 = new Scene(casebox2,700,700);
-        Scene case3 = new Scene(casebox3,700,700);
+        Scene case1 = new Scene(casebox1,900,800);
+        Scene case2 = new Scene(casebox2,900,800);
+        Scene case3 = new Scene(casebox3,900,800);
 
+        stage.setAlwaysOnTop(true);
         stage.setTitle("Game of Life");
 
-        choice1.setOnAction(e->{
-            stage.setScene(case1);
-            stage.setFullScreen(true);
-        });
-        choice2.setOnAction(e->{
-            stage.setScene(case2);
-            stage.setFullScreen(true);
-        });
-        choice3.setOnAction(e->{
-            stage.setScene(case3);
-            stage.setFullScreen(true);
-        });
+        choice1.setOnAction(e-> stage.setScene(case1));
+        choice2.setOnAction(e-> stage.setScene(case2));
+        choice3.setOnAction(e-> stage.setScene(case3));
 
         back1.setOnAction(e->{
             stage.setScene(home_scene);
