@@ -1,7 +1,6 @@
 package com.example.gameoflife;
 
 import javafx.application.Application;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -14,13 +13,50 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.util.Random;
+
 import static javafx.geometry.Pos.CENTER;
+import static javafx.scene.paint.Color.GRAY;
 
 public class Grid extends Application {
 
     @Override
     public void start(Stage stage) {
+        Cell cell = new Cell(25,25);
+        GridPane pane = new GridPane();
+        pane.setMaxHeight(200);
+        pane.setMaxWidth(400);
+        pane.setAlignment(CENTER);
 
+        for (int i=0;i<=75;i++){
+            for(int j = 0;j<=50; j++){
+                pane.add(new javafx.scene.shape.Rectangle(10,10),i,j);
+            }
+        }
+
+        GridPane pane2 = new GridPane();
+        pane2.setMaxHeight(200);
+        pane2.setMaxWidth(400);
+        pane2.setAlignment(CENTER);
+
+        for (int i=0;i<=75;i++){
+            for(int j = 0;j<=50; j++){
+                pane2.add(new javafx.scene.shape.Rectangle(10,10),i,j);
+            }
+        }
+
+        GridPane pane1 = new GridPane();
+        pane1.setMaxHeight(200);
+        pane1.setMaxWidth(400);
+        pane1.setAlignment(CENTER);
+
+        for (int i=0;i<=75;i++){
+            for(int j = 0;j<=50; j++){
+                pane1.add(new javafx.scene.shape.Rectangle(10,10),i,j);
+            }
+        }
         Button choice1 = new Button("Automated_Game_of_life");
         choice1.setFont(Font.font(14));
         choice1.setTextFill(Color.RED);
@@ -40,12 +76,12 @@ public class Grid extends Application {
         Label label1 = new Label("Case 1: Automated Game of life");
         label1.setAlignment(CENTER);
         label1.setFont(Font.font(20));
-        label1.setTextFill(Color.GRAY);
+        label1.setTextFill(GRAY);
 
         Label labelfood = new Label("Units of food:");
         labelfood.setAlignment(CENTER);
         labelfood.setFont(Font.font(14));
-        labelfood.setTextFill(Color.GRAY);
+        labelfood.setTextFill(GRAY);
         TextField food_field = new TextField("Introduce Food");
         food_field.setMaxWidth(100);
 
@@ -74,19 +110,19 @@ public class Grid extends Application {
         Label label2 = new Label("Case 2: Semi-Automated Game of life");
         label2.setAlignment(CENTER);
         label2.setFont(Font.font(20));
-        label2.setTextFill(Color.GRAY);
+        label2.setTextFill(GRAY);
 
         Label labelfood2 = new Label("Food Units");
         labelfood2.setFont(Font.font(14));
-        labelfood2.setTextFill(Color.GRAY);
+        labelfood2.setTextFill(GRAY);
 
         Label labelcell = new Label("Number of sexed cells");
         labelcell.setFont(Font.font(14));
-        labelcell.setTextFill(Color.GRAY);
+        labelcell.setTextFill(GRAY);
 
         Label labelcell1 = new Label("Number of sexed cells");
         labelcell1.setFont(Font.font(14));
-        labelcell1.setTextFill(Color.GRAY);
+        labelcell1.setTextFill(GRAY);
 
         HBox labelbox1 = new HBox();
         labelbox1.setAlignment(CENTER);
@@ -130,7 +166,6 @@ public class Grid extends Application {
             System.out.println(Food.food);
             System.out.println(sexedcell.getText());
             System.out.println(asexualcell.getText());
-
         });
         Button back3 = new Button("Back");
         back3.setTextFill(Color.RED);
@@ -139,7 +174,7 @@ public class Grid extends Application {
         Label label3 = new Label("Case 3: Manual Game Of Life");
         label3.setAlignment(CENTER);
         label3.setFont(Font.font(20));
-        label3.setTextFill(Color.GRAY);
+        label3.setTextFill(GRAY);
 
         TextField food3 = new TextField();
         food3.setMaxWidth(150);
@@ -193,7 +228,7 @@ public class Grid extends Application {
         startstop2.setSpacing(50);
 
         Label home_label = new Label("Game Of Life");
-        home_label.setTextFill(Color.GRAY);
+        home_label.setTextFill(GRAY);
         home_label.setAlignment(CENTER);
         home_label.setFont(Font.font(22));
         hbox3.setSpacing(50);
@@ -204,19 +239,23 @@ public class Grid extends Application {
 
         VBox casebox1 = new VBox();
         casebox1.setAlignment(CENTER);
-        casebox1.getChildren().addAll(label1,labelfood,food_field,hbox1);
-        casebox1.setSpacing(50);
+        casebox1.getChildren().addAll(label1,pane1,labelfood,food_field,hbox1);
 
         VBox casebox2 = new VBox();
         casebox2.setAlignment(CENTER);
-        casebox2.getChildren().addAll(label2,labelbox1,textfields,startstop);
-        casebox2.setSpacing(50);
+        casebox2.getChildren().addAll(label2,pane2,labelbox1,textfields,startstop);
 
         VBox casebox3 = new VBox();
         casebox3.setAlignment(CENTER);
-        casebox3.getChildren().addAll(label3,hbox3,startstop2);
-        casebox3.setSpacing(50);
+        casebox3.getChildren().addAll(label3,pane,hbox3,startstop2);
 
+        casebox1.setSpacing(10);
+        casebox2.setSpacing(10);
+        casebox3.setSpacing(10);
+
+        pane1.setAlignment(CENTER);
+        pane2.setAlignment(CENTER);
+        pane.setAlignment(CENTER);
         Scene home_scene = new Scene(homebox,500,500);
 
         Scene case1 = new Scene(casebox1,500,500);
@@ -225,9 +264,18 @@ public class Grid extends Application {
 
         stage.setTitle("Game of Life");
 
-        choice1.setOnAction(e->stage.setScene(case1));
-        choice2.setOnAction(e->stage.setScene(case2));
-        choice3.setOnAction(e->stage.setScene(case3));
+        choice1.setOnAction(e->{
+            stage.setScene(case1);
+            stage.setFullScreen(true);
+        });
+        choice2.setOnAction(e->{
+            stage.setScene(case2);
+            stage.setFullScreen(true);
+        });
+        choice3.setOnAction(e->{
+            stage.setScene(case3);
+            stage.setFullScreen(true);
+        });
 
         back1.setOnAction(e->{
             stage.setScene(home_scene);
@@ -246,13 +294,12 @@ public class Grid extends Application {
             sexedcell.clear();
             asexualcell.clear();
         });
+
         back3.setOnAction(e->stage.setScene(home_scene));
 
         stage.setScene(home_scene);
         stage.show();
-
     }
-
     public static void main(String[] args) {
         launch(args);
     }
