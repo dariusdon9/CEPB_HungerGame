@@ -22,6 +22,8 @@ import static javafx.scene.paint.Color.*;
 public class Grid extends Application {
 
     private javafx.scene.shape.Rectangle rectangle;
+    private javafx.scene.shape.Rectangle rectangle1;
+    private javafx.scene.shape.Rectangle rectangle2;
 
     @Override
     public void start(Stage stage) {
@@ -85,29 +87,102 @@ public class Grid extends Application {
         TextField food_field = new TextField("Introduce Food");
         food_field.setMaxWidth(100);
 
+        Button refresh1 = new Button("Refresh");
+        refresh1.setTextFill(GREEN);
+        refresh1.setAlignment(CENTER);
+        refresh1.setFont(Font.font(14));
+        refresh1.setOnAction(e->{
+            for (int i=0;i<75;i++){
+                for(int j = 0;j<50; j++){
+                    pane.add(new javafx.scene.shape.Rectangle(10,10,BLACK),i,j);
+                }
+            }
+        });
+
+        Button refresh2 = new Button("Refresh");
+        refresh2.setTextFill(GREEN);
+        refresh2.setAlignment(CENTER);
+        refresh2.setFont(Font.font(14));
+        refresh2.setOnAction(e->{
+            for (int i=0;i<75;i++){
+                for(int j = 0;j<50; j++){
+                    pane1.add(new javafx.scene.shape.Rectangle(10,10),i,j);
+                }
+            }
+        });
+
+        Button refresh3 = new Button("Refresh");
+        refresh3.setTextFill(GREEN);
+        refresh3.setAlignment(CENTER);
+        refresh3.setFont(Font.font(14));
+        refresh3.setOnAction(e->{
+            for (int i=0;i<75;i++){
+                for(int j = 0;j<50; j++){
+                    pane2.add(new javafx.scene.shape.Rectangle(10,10),i,j);
+                }
+            }
+        });
         Button start1 = new Button("Start");
         start1.setFont(Font.font(14));
         start1.setTextFill(Color.GREEN);
         start1.setOnAction(e-> {
                     food_field.getText();
                     Food.food = parseInt(food_field.getText());
-            Random random = new Random();
-            int count = 0;
-            for (int i=0;i<75;i++){
-                for(int j = 0;j<50; j++){
-                    while(count < Food.food) {
-                        int xcoord = random.nextInt(75);
-                        int ycoord = random.nextInt(50);
-                        rectangle = new javafx.scene.shape.Rectangle(10, 10, YELLOW);
-                        pane.add(rectangle, xcoord, ycoord);
-                        //index begin with 1
-                        System.out.println(xcoord + " " + ycoord);
-                        count++;
+                    Random random = new Random();
+                    int count = 0;
+                    for (int i = 0; i < 75; i++) {
+                        for (int j = 0; j < 50; j++) {
+                            while (count < Food.food) {
+                                int xcoord = random.nextInt(75);
+                                int ycoord = random.nextInt(50);
+
+                                rectangle = new javafx.scene.shape.Rectangle(10, 10, YELLOW);
+                                pane1.add(rectangle, xcoord, ycoord);
+                                //index begin with 1
+                                System.out.println(xcoord + " " + ycoord);
+                                count++;
+                            }
+                            int countcell = 0;
+                            int maxcell = random.nextInt(2,100);
+                            for (i = 0; i < 75; i++) {
+                                for (j = 0; j < 50; j++) {
+                                    while (countcell < maxcell ) {
+                                        int xcoord1 = random.nextInt(75);
+                                        int ycoord1 = random.nextInt(50);
+
+                                        int xcoord2 = random.nextInt(75);
+                                        int ycoord2 = random.nextInt(50);
+                                        rectangle1 = new javafx.scene.shape.Rectangle(10, 10, RED);
+                                        rectangle2 = new javafx.scene.shape.Rectangle(10, 10, BLUE);
+
+                                        if (xcoord1 != xcoord2 || ycoord1 != ycoord2) {
+                                            try {
+                                                pane1.add(rectangle1, xcoord1, ycoord1);
+                                                Thread.sleep(10);
+                                            } catch (InterruptedException ex) {
+                                                ex.printStackTrace();
+                                            }
+
+                                            try {
+                                                pane1.add(rectangle2, xcoord2, ycoord2);
+                                                Thread.sleep(10);
+                                            } catch (InterruptedException ex) {
+                                                ex.printStackTrace();
+                                            }
+                                            System.out.println("Number of cell" + 2 * maxcell);
+                                            System.out.println("Sexed cell " + xcoord1 + " " + ycoord1);
+                                            System.out.println("Asexual cell " + xcoord2 + " " + ycoord2);
+                                            countcell++;
+                                        } else {
+                                            System.out.println("Full Spot");
+                                        }
+                                    }
+                                }
+                            }
+                            System.out.println(Food.food);
+                            food_field.clear();
+                        }
                     }
-                }
-            }
-                    System.out.println(Food.food);
-            food_field.clear();
                 }
         );
         Button stop1= new Button("Stop");
@@ -117,7 +192,7 @@ public class Grid extends Application {
         HBox hbox1 = new HBox();
         hbox1.setSpacing(50);
         hbox1.setAlignment(CENTER);
-        hbox1.getChildren().addAll(start1,stop1,back1);
+        hbox1.getChildren().addAll(start1,refresh2,stop1,back1);
 
         Button back2 = new Button("Back");
         back2.setTextFill(Color.RED);
@@ -155,7 +230,7 @@ public class Grid extends Application {
         stop2.setFont(Font.font(14));
 
         HBox startstop = new HBox();
-        startstop.getChildren().addAll(start2,stop2,back2);
+        startstop.getChildren().addAll(start2,refresh3,stop2,back2);
         startstop.setAlignment(CENTER);
         startstop.setSpacing(50);
 
@@ -176,25 +251,54 @@ public class Grid extends Application {
         textfields.setAlignment(CENTER);
         textfields.getChildren().addAll(food2,sexedcell,asexualcell);
 
+
+
         start2.setOnAction(e->{
             Food.food = parseInt(food2.getText());
+            int countsexed = parseInt(sexedcell.getText());
+            int countasexual = parseInt(asexualcell.getText());
 
             Random random = new Random();
             int count = 0;
-            for (int i=0;i<75;i++){
-                for(int j = 0;j<50; j++){
-                    while(count < Food.food) {
+            for (int i=0;i<75;i++) {
+                for (int j = 0; j < 50; j++) {
+                    while (count < Food.food) {
                         int xcoord = random.nextInt(75);
                         int ycoord = random.nextInt(50);
                         rectangle = new javafx.scene.shape.Rectangle(10, 10, YELLOW);
-                        pane.add(rectangle, xcoord, ycoord);
+                        pane2.add(rectangle, xcoord, ycoord);
                         //index begin with 1
                         System.out.println(xcoord + " " + ycoord);
                         count++;
                     }
                 }
             }
+                    int contor1 = 0;
+                    int contor2 = 0;
+                    for (int i = 0; i<75; i++) {
+                        for (int j = 0; j < 50; j++) {
+                            while (contor1 < countsexed) {
 
+                                int xcoord1 = random.nextInt(75);
+                                int ycoord1 = random.nextInt(50);
+                                rectangle1 = new javafx.scene.shape.Rectangle(10, 10, RED);
+                                    pane2.add(rectangle1, xcoord1, ycoord1);
+                                    contor1++;
+                            }
+                        }
+                    }
+
+                    for (int i = 0; i<75; i++) {
+                        for (int j = 0; j < 50; j++) {
+                            while (contor2 < countasexual && pane2.contains(rectangle1.getLayoutX(),rectangle1.getLayoutY())) {
+                                int xcoord2 = random.nextInt(75);
+                                int ycoord2 = random.nextInt(50);
+                                rectangle2 = new javafx.scene.shape.Rectangle(10, 10, BLUE);
+                                pane2.add(rectangle2, xcoord2, ycoord2);
+                                contor2++;
+                            }
+                        }
+                    }
             System.out.println(Food.food);
             System.out.println(sexedcell.getText());
             System.out.println(asexualcell.getText());
@@ -224,8 +328,7 @@ public class Grid extends Application {
 
         Button addcell1 = new Button("Add sexed cell");
         Button addcell2 = new Button("Add asexual cell");
-        //int randomx = (int) Math.ceil(Math.random() * 75);
-        //int randomy = (int) Math.ceil(Math.random() *50);
+
         start3.setOnAction(e->{
             Food.food = parseInt(food3.getText());
             System.out.println(Food.food);
@@ -234,13 +337,18 @@ public class Grid extends Application {
             for (int i=0;i<75;i++){
                 for(int j = 0;j<50; j++){
                     while(count < Food.food) {
-                        int xcoord = random.nextInt(75);
-                        int ycoord = random.nextInt(50);
-                        rectangle = new javafx.scene.shape.Rectangle(10, 10, YELLOW);
-                        pane.add(rectangle, xcoord, ycoord);
-                        //index begin with 1
-                        System.out.println(xcoord + " " + ycoord);
-                        count++;
+                        try {
+                            Thread.sleep(10);
+                            int xcoord = random.nextInt(75);
+                            int ycoord = random.nextInt(50);
+                            rectangle = new javafx.scene.shape.Rectangle(10, 10, YELLOW);
+                            pane.add(rectangle, xcoord, ycoord);
+                            //index begin with 1
+                            System.out.println(xcoord + " " + ycoord);
+                            count++;
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 }
             }
@@ -253,29 +361,32 @@ public class Grid extends Application {
         addcell2.setFont(Font.font(14));
         addcell1.setTextFill(Color.RED);
         addcell2.setTextFill(Color.BLUE);
-        Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
-        Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
 
-        alert1.setContentText("You selected Sexed cell type!");
-        alert2.setContentText("You selected Assexual cell type");
-
-        alert1.setTitle("Sexed cell");
-        alert2.setTitle("Asexual cell");
-
-        alert1.setHeaderText("Nice choice!");
-        alert2.setHeaderText("Right choice for population!");
-
-        addcell1.setOnAction(e-> alert1.show());
-        addcell2.setOnAction(e-> alert2.show());
 
         HBox hbox3 = new HBox();
         hbox3.setAlignment(CENTER);
         hbox3.getChildren().addAll(food3,addcell1,addcell2);
         HBox startstop2 = new HBox();
 
-        startstop2.getChildren().addAll(start3,stop3,back3);
+        startstop2.getChildren().addAll(start3,refresh1,stop3,back3);
         startstop2.setAlignment(CENTER);
         startstop2.setSpacing(50);
+        Alert alert1 = new Alert(Alert.AlertType.NONE);
+        addcell1.setOnAction(e-> {
+            alert1.setAlertType(Alert.AlertType.INFORMATION);
+            alert1.setContentText("You selected Sexed cell type!");
+            alert1.setTitle("Sexed cell");
+            alert1.setHeaderText("Nice choice!");
+            alert1.show();
+        });
+
+        addcell2.setOnAction(e->{
+            Alert alert2 = new Alert(Alert.AlertType.WARNING);
+            alert2.setContentText("You selected Assexual cell type");
+            alert2.setTitle("Asexual cell");
+            alert2.setHeaderText("Right choice for population!");
+            alert2.show();
+        });
 
         Label home_label = new Label("Game Of Life");
         home_label.setTextFill(GRAY);
@@ -308,14 +419,16 @@ public class Grid extends Application {
         pane.setAlignment(CENTER);
         Scene home_scene = new Scene(homebox,500,500);
 
-        Scene case1 = new Scene(casebox1,900,800);
-        Scene case2 = new Scene(casebox2,900,800);
-        Scene case3 = new Scene(casebox3,900,800);
+        Scene case1 = new Scene(casebox1,900,700);
+        Scene case2 = new Scene(casebox2,900,700);
+        Scene case3 = new Scene(casebox3,900,700);
 
         stage.setAlwaysOnTop(true);
         stage.setTitle("Game of Life");
 
         choice1.setOnAction(e-> stage.setScene(case1));
+
+
         choice2.setOnAction(e-> stage.setScene(case2));
         choice3.setOnAction(e-> stage.setScene(case3));
 
@@ -338,7 +451,6 @@ public class Grid extends Application {
         });
 
         back3.setOnAction(e->stage.setScene(home_scene));
-
         stage.setScene(home_scene);
         stage.show();
     }
