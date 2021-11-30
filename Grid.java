@@ -16,8 +16,7 @@ import javafx.stage.Stage;
 
 import java.util.Random;
 
-import static com.example.gameoflife.DataBase.createTable;
-import static com.example.gameoflife.DataBase.getConnection;
+import static com.example.gameoflife.DataBase.*;
 import static java.lang.Integer.parseInt;
 import static javafx.geometry.Pos.CENTER;
 import static javafx.scene.paint.Color.*;
@@ -107,6 +106,11 @@ public class Grid extends Application {
         refresh2.setAlignment(CENTER);
         refresh2.setFont(Font.font(14));
         refresh2.setOnAction(e->{
+            try {
+                refreshTable("Auto");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
             for (int i=0;i<75;i++){
                 for(int j = 0;j<50; j++){
                     pane1.add(new javafx.scene.shape.Rectangle(10,10),i,j);
@@ -119,6 +123,11 @@ public class Grid extends Application {
         refresh3.setAlignment(CENTER);
         refresh3.setFont(Font.font(14));
         refresh3.setOnAction(e->{
+            try {
+                refreshTable("Semi");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
             for (int i=0;i<75;i++){
                 for(int j = 0;j<50; j++){
                     pane2.add(new javafx.scene.shape.Rectangle(10,10),i,j);
@@ -130,7 +139,12 @@ public class Grid extends Application {
         start1.setTextFill(Color.GREEN);
         start1.setOnAction(e-> {
                     food_field.getText();
-                    Food.food = parseInt(food_field.getText());
+            try {
+                createTable("Auto");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            Food.food = parseInt(food_field.getText());
                     Random random = new Random();
                     int count = 0;
                     for (int i = 0; i < 75; i++) {
@@ -163,8 +177,9 @@ public class Grid extends Application {
                                                 pane1.add(rectangle1, xcoord1, ycoord1);
                                                 Cell cell = new Cell(xcoord1,ycoord1," Sexed");
                                                 System.out.println(cell.getX() + " " + cell.getY() + " " + cell.getType());
+                                                enter(cell.getX(),cell.getY(),cell.getType());
                                                 Thread.sleep(10);
-                                            } catch (InterruptedException ex) {
+                                            } catch (Exception ex) {
                                                 ex.printStackTrace();
                                             }
 
@@ -172,8 +187,9 @@ public class Grid extends Application {
                                                 pane1.add(rectangle2, xcoord2, ycoord2);
                                                 Cell cell = new Cell(xcoord2,xcoord2," Asexual");
                                                 System.out.println(cell.getX() + " " + cell.getY() + " " + cell.getType());
+                                                enter(cell.getX(),cell.getY(),cell.getType());
                                                 Thread.sleep(10);
-                                            } catch (InterruptedException ex) {
+                                            } catch (Exception ex) {
                                                 ex.printStackTrace();
                                             }
                                             System.out.println("Number of cell: " + 2 * maxcell);
@@ -262,7 +278,11 @@ public class Grid extends Application {
             Food.food = parseInt(food2.getText());
             int countsexed = parseInt(sexedcell.getText());
             int countasexual = parseInt(asexualcell.getText());
-
+            try {
+                createTable("Semi");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
             Random random = new Random();
             int count = 0;
             for (int i=0;i<75;i++) {
@@ -288,7 +308,12 @@ public class Grid extends Application {
                                 int ycoord1 = random.nextInt(50);
                                 rectangle1 = new javafx.scene.shape.Rectangle(10, 10, RED);
                                     pane2.add(rectangle1, xcoord1, ycoord1);
-                                    Cell cell = new Cell(xcoord1,ycoord1," sexed");
+                                    Cell cell = new Cell(xcoord1,ycoord1," Sexed");
+                                try {
+                                    enter(cell.getX(),cell.getY(),cell.getType());
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
                                     System.out.println(cell.getX() + " " + cell.getY() + cell.getType());
                                     contor1++;
                             }
@@ -304,6 +329,11 @@ public class Grid extends Application {
                                 rectangle2 = new javafx.scene.shape.Rectangle(10, 10, BLUE);
                                 pane2.add(rectangle2, xcoord2, ycoord2);
                                 Cell cell = new Cell(xcoord2,ycoord2," Asexual");
+                                try {
+                                    enter(cell.getX(),cell.getY(),cell.getType());
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
                                 System.out.println(cell.getX() + " " + cell.getY() + cell.getType());
                                 contor2++;
                             }
@@ -341,6 +371,11 @@ public class Grid extends Application {
 
         start3.setOnAction(e->{
             Food.food = parseInt(food3.getText());
+            try {
+                createTable("Manual");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
             System.out.println(Food.food);
             Random random = new Random();
             int count = 0;
@@ -393,11 +428,15 @@ public class Grid extends Application {
                             rectangle1 = new Rectangle(10,10,RED);
                             rectangle1.setX(x);
                             rectangle1.setY(y);
-
                             //pane.add(rectangle1,x,y);
                             System.out.println(x);
                             System.out.println(y);
                             Cell cell = new Cell(x,y,"Sexed ");
+                            try {
+                                enter(cell.getX(), cell.getY(),cell.getType());
+                            } catch (Exception exc) {
+                                exc.printStackTrace();
+                            }
                             System.out.println(cell.getX() + " " + cell.getY() + " " + cell.getType());
                         });
                         count++;
@@ -428,6 +467,11 @@ public class Grid extends Application {
                             System.out.println(y);
                             Cell cell = new Cell(x,y,"Asexed");
                             System.out.println(cell.getX()+ " " + cell.getY() + " " + cell.getType());
+                            try {
+                                enter(cell.getX(), cell.getY(),cell.getType());
+                            } catch (Exception exc) {
+                                exc.printStackTrace();
+                            }
                         });
                         count++;
                     }
@@ -504,6 +548,5 @@ public class Grid extends Application {
     public static void main(String[] args) throws Exception {
         launch(args);
         getConnection();
-        createTable();
     }
 }
