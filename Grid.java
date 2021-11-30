@@ -10,9 +10,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.awt.event.MouseEvent;
 import java.util.Random;
 
 import static java.lang.Integer.parseInt;
@@ -158,6 +160,8 @@ public class Grid extends Application {
                                         if (xcoord1 != xcoord2 || ycoord1 != ycoord2) {
                                             try {
                                                 pane1.add(rectangle1, xcoord1, ycoord1);
+                                                Cell cell = new Cell(xcoord1,ycoord1," Sexed");
+                                                System.out.println(cell.getX() + " " + cell.getY() + " " + cell.getType());
                                                 Thread.sleep(10);
                                             } catch (InterruptedException ex) {
                                                 ex.printStackTrace();
@@ -165,16 +169,16 @@ public class Grid extends Application {
 
                                             try {
                                                 pane1.add(rectangle2, xcoord2, ycoord2);
+                                                Cell cell = new Cell(xcoord2,xcoord2," Asexual");
+                                                System.out.println(cell.getX() + " " + cell.getY() + " " + cell.getType());
                                                 Thread.sleep(10);
                                             } catch (InterruptedException ex) {
                                                 ex.printStackTrace();
                                             }
-                                            System.out.println("Number of cell" + 2 * maxcell);
-                                            System.out.println("Sexed cell " + xcoord1 + " " + ycoord1);
-                                            System.out.println("Asexual cell " + xcoord2 + " " + ycoord2);
+                                            System.out.println("Number of cell: " + 2 * maxcell);
                                             countcell++;
                                         } else {
-                                            System.out.println("Full Spot");
+                                            System.out.println("Full Spot!");
                                         }
                                     }
                                 }
@@ -268,21 +272,23 @@ public class Grid extends Application {
                         rectangle = new javafx.scene.shape.Rectangle(10, 10, YELLOW);
                         pane2.add(rectangle, xcoord, ycoord);
                         //index begin with 1
-                        System.out.println(xcoord + " " + ycoord);
                         count++;
                     }
                 }
             }
+
                     int contor1 = 0;
                     int contor2 = 0;
                     for (int i = 0; i<75; i++) {
                         for (int j = 0; j < 50; j++) {
                             while (contor1 < countsexed) {
-
+                                //Thread thread = new Thread();
                                 int xcoord1 = random.nextInt(75);
                                 int ycoord1 = random.nextInt(50);
                                 rectangle1 = new javafx.scene.shape.Rectangle(10, 10, RED);
                                     pane2.add(rectangle1, xcoord1, ycoord1);
+                                    Cell cell = new Cell(xcoord1,ycoord1," sexed");
+                                    System.out.println(cell.getX() + " " + cell.getY() + cell.getType());
                                     contor1++;
                             }
                         }
@@ -291,10 +297,13 @@ public class Grid extends Application {
                     for (int i = 0; i<75; i++) {
                         for (int j = 0; j < 50; j++) {
                             while (contor2 < countasexual && pane2.contains(rectangle1.getLayoutX(),rectangle1.getLayoutY())) {
+                                //Thread thread = new Thread();
                                 int xcoord2 = random.nextInt(75);
                                 int ycoord2 = random.nextInt(50);
                                 rectangle2 = new javafx.scene.shape.Rectangle(10, 10, BLUE);
                                 pane2.add(rectangle2, xcoord2, ycoord2);
+                                Cell cell = new Cell(xcoord2,ycoord2," Asexual");
+                                System.out.println(cell.getX() + " " + cell.getY() + cell.getType());
                                 contor2++;
                             }
                         }
@@ -337,21 +346,16 @@ public class Grid extends Application {
             for (int i=0;i<75;i++){
                 for(int j = 0;j<50; j++){
                     while(count < Food.food) {
-                        try {
-                            Thread.sleep(10);
-                            int xcoord = random.nextInt(75);
-                            int ycoord = random.nextInt(50);
-                            rectangle = new javafx.scene.shape.Rectangle(10, 10, YELLOW);
-                            pane.add(rectangle, xcoord, ycoord);
-                            //index begin with 1
-                            System.out.println(xcoord + " " + ycoord);
-                            count++;
-                        } catch (InterruptedException ex) {
-                            ex.printStackTrace();
-                        }
+                        int xcoord = random.nextInt(75);
+                        int ycoord = random.nextInt(50);
+                        rectangle = new javafx.scene.shape.Rectangle(10, 10, YELLOW);
+                        pane.add(rectangle, xcoord, ycoord);
+                        count++;
                     }
                 }
             }
+            rectangle1 = new javafx.scene.shape.Rectangle(10,10,RED);
+            rectangle2 = new javafx.scene.shape.Rectangle(10,10,BLUE);
             food3.clear();
         });
 
@@ -373,19 +377,61 @@ public class Grid extends Application {
         startstop2.setSpacing(50);
         Alert alert1 = new Alert(Alert.AlertType.NONE);
         addcell1.setOnAction(e-> {
-            alert1.setAlertType(Alert.AlertType.INFORMATION);
+            /*alert1.setAlertType(Alert.AlertType.INFORMATION);
             alert1.setContentText("You selected Sexed cell type!");
             alert1.setTitle("Sexed cell");
             alert1.setHeaderText("Nice choice!");
-            alert1.show();
+            alert1.show();*/
+            int count = 0;
+            for (int i = 0; i < 75; i++) {
+                for (int j = 0; j < 50; j++) {
+                    while (count < 10) {
+                        pane.setOnMouseClicked(ex -> {
+                            int x = ((int)ex.getSceneX() - 60)/10;
+                            int y = ((int)ex.getSceneY() - 70)/10;
+                            rectangle1 = new Rectangle(10,10,RED);
+                            rectangle1.setX(x);
+                            rectangle1.setY(y);
+
+                            //pane.add(rectangle1,x,y);
+                            System.out.println(x);
+                            System.out.println(y);
+                            Cell cell = new Cell(x,y,"Sexed ");
+                            System.out.println(cell.getX() + " " + cell.getY() + " " + cell.getType());
+                        });
+                        count++;
+                    }
+                }
+            }
         });
 
         addcell2.setOnAction(e->{
-            Alert alert2 = new Alert(Alert.AlertType.WARNING);
+            /*Alert alert2 = new Alert(Alert.AlertType.WARNING);
             alert2.setContentText("You selected Assexual cell type");
             alert2.setTitle("Asexual cell");
             alert2.setHeaderText("Right choice for population!");
-            alert2.show();
+            alert2.show();*/
+            int count = 0;
+            for (int i = 0; i < 75; i++) {
+                for (int j = 0; j < 50; j++) {
+                    while (count < 10) {
+                        pane.setOnMouseClicked(ex -> {
+                            int x = ((int)ex.getSceneX() - 60)/10;
+                            int y = ((int)ex.getSceneY() - 70)/10;
+                            rectangle1 = new Rectangle(10,10,RED);
+                            rectangle1.setX(x);
+                            rectangle1.setY(y);
+
+                            //pane.add(rectangle1,x,y);
+                            System.out.println(x);
+                            System.out.println(y);
+                            Cell cell = new Cell(x,y,"Asexed");
+                            System.out.println(cell.getX()+ " " + cell.getY() + " " + cell.getType());
+                        });
+                        count++;
+                    }
+                }
+            }
         });
 
         Label home_label = new Label("Game Of Life");
