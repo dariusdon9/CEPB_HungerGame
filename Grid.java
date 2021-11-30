@@ -14,9 +14,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import java.awt.event.MouseEvent;
 import java.util.Random;
 
+import static com.example.gameoflife.DataBase.createTable;
+import static com.example.gameoflife.DataBase.getConnection;
 import static java.lang.Integer.parseInt;
 import static javafx.geometry.Pos.CENTER;
 import static javafx.scene.paint.Color.*;
@@ -500,7 +501,9 @@ public class Grid extends Application {
         stage.setScene(home_scene);
         stage.show();
     }
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         launch(args);
+        getConnection();
+        createTable();
     }
 }
