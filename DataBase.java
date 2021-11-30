@@ -8,6 +8,11 @@ import java.sql.SQLException;
 
 public class DataBase {
     public Connection link;
+    public static int count;
+    public static int x;
+    public static int y;
+    public static String type;
+    public static String name;
     public static Connection getConnection()throws Exception, SQLException {
        try{
            String driver = "com.mysql.cj.jdbc.Driver";
@@ -25,12 +30,19 @@ public class DataBase {
        }
         return null;
     }
-    public static void createTable() throws Exception{
-        try{
+    public static void refreshTable(String name) throws Exception {
+        DataBase.name = name;
+        Connection connection = getConnection();
+        PreparedStatement refresh = connection.prepareStatement("DELETE FROM TEST."+name);
+        refresh.executeUpdate();
+    }
 
+    public static void createTable(String name) throws Exception{
+        try{
+            DataBase.name = name;
             Connection connection = getConnection();
             PreparedStatement create = connection.prepareStatement(
-                    "CREATE TABLE CELL(ID INT NOT NULL AUTO_INCREMENT,CELL_X_COORDINATE INT,CELL_Y_COORDINATE INT,CELL_TYPE VARCHAR(255),PRIMARY KEY(ID))"
+                    "CREATE TABLE "+name+"(ID INT NOT NULL AUTO_INCREMENT,CELL_X_COORDINATE INT,CELL_Y_COORDINATE INT,CELL_TYPE VARCHAR(255),PRIMARY KEY(ID))"
             );
             create.executeUpdate();
 
@@ -40,5 +52,22 @@ public class DataBase {
         finally{
             System.out.println("Function Complete");
         };
+    }
+
+    public static void enter(int x, int y, String type)throws Exception{
+        DataBase.x = x;
+        DataBase.y = y;
+        DataBase.type = type;
+
+        try{
+            Connection connection = getConnection();
+            PreparedStatement posted = connection.prepareStatement("INSERT INTO "+name+"(CELL_X_COORDINATE,CELL_Y_COORDINATE,CELL_TYPE)VALUES('"+x+"','"+y+"','" + type +"')");
+            posted.executeUpdate();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        finally{
+            System.out.println("Insert Completed");
+        }
     }
 }
